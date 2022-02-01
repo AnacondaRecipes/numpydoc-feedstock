@@ -1,38 +1,46 @@
+{% set name = "numpydoc" %}
 {% set version = "1.2" %}
 
 package:
-  name: numpydoc
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: numpydoc-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/n/numpydoc/numpydoc-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/numpydoc-{{ version }}.tar.gz
   sha256: 0cec233740c6b125913005d16e8a9996e060528afcb8b7cad3f2706629dfd6f7
 
 build:
   noarch: python
-  number: 1
+  number: 0
   script: {{ PYTHON }} -m pip install . --no-deps -vv
 
 requirements:
   host:
     - pip
-    - python >=3.5
+    - python
     - setuptools
-
+    - wheel
   run:
-    - python >=3.5
-    - sphinx
+    - python >=3.7
+    - jinja2 >=2.10
+    - sphinx >=1.8
 
 test:
   imports:
     - numpydoc
+  requires:
+    - pip
+  commands:
+    - pip check
 
 about:
   home: https://github.com/numpy/numpydoc
   license: BSD-3-Clause
+  license_family: BSD
   license_file: LICENSE.txt
   summary: Numpy's Sphinx extensions
+  dev_url: https://github.com/numpy/numpydoc
+  doc_url: https://numpydoc.readthedocs.io/en/latest/
 
 extra:
   recipe-maintainers:
