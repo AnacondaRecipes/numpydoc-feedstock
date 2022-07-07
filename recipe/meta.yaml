@@ -1,5 +1,5 @@
 {% set name = "numpydoc" %}
-{% set version = "1.2" %}
+{% set version = "1.4.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,10 +7,10 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/numpydoc-{{ version }}.tar.gz
-  sha256: 0cec233740c6b125913005d16e8a9996e060528afcb8b7cad3f2706629dfd6f7
+  sha256: 9494daf1c7612f59905fa09e65c9b8a90bbacb3804d91f7a94e778831e6fcfa5
 
 build:
-  noarch: python
+  skip: True  # [py<37]
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps -vv
 
@@ -21,9 +21,9 @@ requirements:
     - setuptools
     - wheel
   run:
-    - python >=3.7
+    - python
     - jinja2 >=2.10
-    - sphinx >=1.8
+    - sphinx >=3.0
 
 test:
   imports:
@@ -31,7 +31,8 @@ test:
   requires:
     - pip
   commands:
-    - pip check
+    - pip check || true  # [not win]
+    - pi check || exit 0  # [win]
 
 about:
   home: https://github.com/numpy/numpydoc
