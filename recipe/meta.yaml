@@ -23,7 +23,7 @@ requirements:
   run:
     - python
     - jinja2 >=2.10
-    - sphinx >=3.0
+    - sphinx >=4.2
 
 test:
   imports:
@@ -32,14 +32,17 @@ test:
     - pip
   commands:
     - pip check || true  # [not win]
-    - pi check || exit 0  # [win]
+    - pip check || (exit 1)  # [win]
 
 about:
   home: https://github.com/numpy/numpydoc
   license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE.txt
-  summary: Numpy's Sphinx extensions
+  summary: Sphinx extension to support docstrings in Numpy format
+  description: |
+    Numpy's documentation uses several custom extensions to Sphinx. These are shipped in this numpydoc package, in case you want to make use of them in third-party projects.
+    The numpydoc extension provides support for the Numpy docstring format in Sphinx, and adds the code description directives np:function, np-c:function, etc. that support the Numpy docstring syntax.
   dev_url: https://github.com/numpy/numpydoc
   doc_url: https://numpydoc.readthedocs.io/en/latest/
 
