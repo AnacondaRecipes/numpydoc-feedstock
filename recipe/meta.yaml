@@ -1,5 +1,5 @@
 {% set name = "numpydoc" %}
-{% set version = "1.5.0" %}
+{% set version = "1.7.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,12 +7,12 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/numpydoc-{{ version }}.tar.gz
-  sha256: b0db7b75a32367a0e25c23b397842c65e344a1206524d16c8069f0a1c91b5f4c
+  sha256: 866e5ae5b6509dcf873fc6381120f5c31acf13b135636c1a81d68c166a95f921
 
 build:
   skip: True  # [py<37]
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
   host:
@@ -22,17 +22,20 @@ requirements:
     - wheel
   run:
     - python
-    - jinja2 >=2.10
-    - sphinx >=4.2
+    - sphinx >=6
+    - tabulate >=0.8.10
+    - tomli >=1.1.0  # [py311]
 
 test:
   imports:
     - numpydoc
   requires:
     - pip
+    - pytest
+    - matplotlib-base
   commands:
-    - pip check || true  # [not win]
-    - pip check || cmd /K "exit /b 0"  # [win]
+    - pip check
+    - pytest --pyargs numpydoc
 
 about:
   home: https://github.com/numpy/numpydoc
@@ -44,7 +47,7 @@ about:
     Numpy's documentation uses several custom extensions to Sphinx. These are shipped in this numpydoc package, in case you want to make use of them in third-party projects.
     The numpydoc extension provides support for the Numpy docstring format in Sphinx, and adds the code description directives np:function, np-c:function, etc. that support the Numpy docstring syntax.
   dev_url: https://github.com/numpy/numpydoc
-  doc_url: https://numpydoc.readthedocs.io/en/latest/
+  doc_url: https://numpydoc.readthedocs.io/
 
 extra:
   recipe-maintainers:
