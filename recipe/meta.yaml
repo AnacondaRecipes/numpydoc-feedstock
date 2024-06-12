@@ -10,7 +10,8 @@ source:
   sha256: 866e5ae5b6509dcf873fc6381120f5c31acf13b135636c1a81d68c166a95f921
 
 build:
-  skip: True  # [py<37]
+  # sphinx >=7.2.0 requires py>=39, we didn't build sphinx >5.0.2,<7.3.7.
+  skip: True  # [py<39]
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
