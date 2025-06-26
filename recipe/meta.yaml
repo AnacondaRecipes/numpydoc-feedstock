@@ -1,17 +1,16 @@
 {% set name = "numpydoc" %}
-{% set version = "1.7.0" %}
+{% set version = "1.9.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/numpydoc-{{ version }}.tar.gz
-  sha256: 866e5ae5b6509dcf873fc6381120f5c31acf13b135636c1a81d68c166a95f921
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/numpydoc-{{ version }}.tar.gz
+  sha256: 5fec64908fe041acc4b3afc2a32c49aab1540cf581876f5563d68bb129e27c5b
 
 build:
-  # sphinx >=7.2.0 requires py>=39, we didn't build sphinx >5.0.2,<7.3.7.
-  skip: True  # [py<39]
+  skip: true  # [py<39]
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
@@ -19,23 +18,33 @@ requirements:
   host:
     - pip
     - python
-    - setuptools
-    - wheel
+    - setuptools >=61.2
   run:
     - python
     - sphinx >=6
-    - tabulate >=0.8.10
     - tomli >=1.1.0  # [py<311]
 
 test:
+  source_files:
+    - numpydoc
   imports:
     - numpydoc
+    - numpydoc.cli
+    - numpydoc.docscrape
+    - numpydoc.docscrape_sphinx
+    - numpydoc.hooks
+    - numpydoc.hooks.validate_docstrings
+    - numpydoc.numpydoc
+    - numpydoc.tests
+    - numpydoc.validate
+    - numpydoc.xref
   requires:
     - pip
     - pytest
     - matplotlib-base
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
     - pytest --pyargs numpydoc
 
 about:
@@ -48,7 +57,7 @@ about:
     Numpy's documentation uses several custom extensions to Sphinx. These are shipped in this numpydoc package, in case you want to make use of them in third-party projects.
     The numpydoc extension provides support for the Numpy docstring format in Sphinx, and adds the code description directives np:function, np-c:function, etc. that support the Numpy docstring syntax.
   dev_url: https://github.com/numpy/numpydoc
-  doc_url: https://numpydoc.readthedocs.io/
+  doc_url: https://numpydoc.readthedocs.io
 
 extra:
   recipe-maintainers:
