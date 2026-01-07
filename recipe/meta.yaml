@@ -1,5 +1,5 @@
 {% set name = "numpydoc" %}
-{% set version = "1.9.0" %}
+{% set version = "1.10.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,18 +7,19 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/numpydoc-{{ version }}.tar.gz
-  sha256: 5fec64908fe041acc4b3afc2a32c49aab1540cf581876f5563d68bb129e27c5b
+  sha256: 3f7970f6eee30912260a6b31ac72bba2432830cd6722569ec17ee8d3ef5ffa01
 
 build:
-  skip: true  # [py<39]
+  skip: true  # [py<310]
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+  entry_points:
+    - numpydoc = numpydoc.cli:main
 
 requirements:
   host:
     - pip
     - python
-    - wheel
     - setuptools >=61.2
   run:
     - python
@@ -47,6 +48,7 @@ test:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
     - pytest --pyargs numpydoc
+    - numpydoc --help
 
 about:
   home: https://github.com/numpy/numpydoc
